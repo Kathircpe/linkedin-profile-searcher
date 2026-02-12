@@ -20,6 +20,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,22 +44,20 @@ public final class PhantomClient {
 
     public List<String> launchSearchExport(String searchUrl) {
         String json = """
-                {"id": "3149", "bonusArguments": {"searchUrl": "%s"}}
-                """.formatted(searchUrl);
+                {"id": "%s", "bonusArguments": {"searchUrl": "%s"}}
+                """.formatted(PhantomBusterApi.profileUrlSearchId,searchUrl);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Phantombuster-Key-1", apiKey);
+        headers.set("X-Phantombuster-Key", apiKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(
                 BASE_URL + "/agents/launch", entity, String.class);
-        System.out.println("2");
 
-        JsonObject jsonResponse = JsonParser.parseString(response.getBody()).getAsJsonObject();
-        System.out.println("3");
+        JsonObject jsonResponse = JsonParser.parseString(Objects.requireNonNull(response.getBody())).getAsJsonObject();
 
-        return pollSearchResults(jsonResponse.get("agentId").getAsString());
+        return pollSearchResults(jsonResponse.get("containerId").getAsString());
     }
 
     public List<String> pollSearchResults(String agentId) {
@@ -129,21 +128,21 @@ public final class PhantomClient {
 
         String json = """
                 {
-                    "id": "5589386912058181",
+                    "id": "%s",
                     "bonusArguments": {
                         "profileArray": %s,
                         "sessionCookie": "%s",
                         "asAPI": true
                     }
                 }
-                """.formatted(profileList, linkedInCookie);
+                """.formatted(PhantomBusterApi.profileScrapperId,profileList, linkedInCookie);
 
         return executePost("/agents/launch", json);
     }
 
     private String executePost(String endpoint, String json) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Phantombuster-Key-1", apiKey);
+        headers.set("X-Phantombuster-Key", apiKey);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<>(json, headers);

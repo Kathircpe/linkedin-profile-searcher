@@ -22,12 +22,14 @@ public final class BaseUrlUtil {
     }
 
     public static String buildSearchUrl(String university, String designation) {
+        university = swapSpaceWithReplacement(university);
+        designation = swapSpaceWithReplacement(designation);
         return String.format(
                 "https://www.linkedin.com/search/results/people/?keywords=%s+%s",
                 designation, university);
     }
 
-    private static String swapSpaceWithReplacement(String str) {
+    static String swapSpaceWithReplacement(String str) {
         return str.replace(" ", "%20");
     }
 }

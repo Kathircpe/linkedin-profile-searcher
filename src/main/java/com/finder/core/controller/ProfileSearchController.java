@@ -1,6 +1,8 @@
 package com.finder.core.controller;
 
 import com.finder.core.dto.SearchResponseBody;
+import com.finder.core.model.LinkedInProfile;
+import com.finder.core.repository.ProfileRepository;
 import com.finder.core.service.ProfileSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,6 +35,7 @@ public class ProfileSearchController {
     private ResponseEntity<SearchResponseBody> getSavedAlumniProfiles() {
         return profileSearchService.getSavedAlumniProfiles();
     }
+
 
 
 }
