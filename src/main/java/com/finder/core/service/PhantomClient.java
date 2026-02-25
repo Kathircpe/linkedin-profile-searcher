@@ -89,10 +89,8 @@ public final class PhantomClient {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
         String url = BASE_URL + "/agents/fetch?id=" + agentId + "&downloadResults=true";
-        System.out.println("6");
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        System.out.println("7");
 
         JsonObject json = JsonParser.parseString(response.getBody()).getAsJsonObject();
         return new AgentStatus(json.get("state").getAsString(),
